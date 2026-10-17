@@ -1,11 +1,11 @@
 {
   "name": "@afilimax/cli",
   "description": "CLI para geração de links de afiliados: Amazon, Mercado Livre, Magazine Luiza, Shopee e AliExpress",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "type": "commonjs",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Afilimax/afilimax-cli.git"
+    "url": "git+https://github.com/Afilimax/afilimax-cli.git"
   },
   "homepage": "https://github.com/Afilimax/afilimax-cli#readme",
   "bugs": {
@@ -20,7 +20,7 @@
     "!/**/__tests__"
   ],
   "bin": {
-    "afilimax": "./dist/afilimax.js"
+    "afilimax": "dist/afilimax.js"
   },
   "scripts": {
     "build": "tsc",

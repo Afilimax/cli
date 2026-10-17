@@ -27,6 +27,8 @@
 ## ✨ Recursos
 
 - 🔗 **Detecção Automática de Plataforma**: Envie qualquer URL de produto e a CLI identifica automaticamente o provedor correto.
+- 🔍 **Scraping & Pesquisa de Produtos**: Scraping de dados detalhados e pesquisa com navegação paginada no terminal (Amazon, Mercado Livre e AliExpress).
+- ⚡ **Geração Instantânea de Afiliado**: Crie links de afiliados diretamente a partir dos resultados de busca ou de produtos extraídos.
 - 🍪 **Gerenciamento Inteligente de Cookies**: Suporte a exportação de cookies via extensão do navegador (recomendado) ou via navegador automatizado (Puppeteer).
 - 🔒 **Validação de Expiração**: Alerta automático sobre a data de expiração dos cookies salvos.
 - 🎨 **Interface Rica no Terminal**: Banners ASCII estilizados, relatórios em formato de cartão e mensagens coloridas no padrão ANSI.
