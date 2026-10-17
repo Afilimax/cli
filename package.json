@@ -24,8 +24,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "build:bundle": "esbuild src/afilimax.ts --bundle --platform=node --target=node18 --outfile=dist/afilimax-bundle.js",
-    "build:bin": "pkg dist/afilimax-bundle.js --targets node18-win-x64,node18-linux-x64,node18-macos-x64 --out-path bin && node -e \"const fs=require('fs'); if(fs.existsSync('bin/afilimax-bundle-win.exe')) fs.renameSync('bin/afilimax-bundle-win.exe','bin/afilimax-win.exe'); if(fs.existsSync('bin/afilimax-bundle-linux')) fs.renameSync('bin/afilimax-bundle-linux','bin/afilimax-linux'); if(fs.existsSync('bin/afilimax-bundle-macos')) fs.renameSync('bin/afilimax-bundle-macos','bin/afilimax-macos');\"",
+    "build:bundle": "esbuild src/afilimax.ts --bundle --platform=node --target=node22 --outfile=dist/afilimax-bundle.js --packages=external",
+    "build:bin": "pkg dist/afilimax-bundle.js --targets node22-win-x64,node22-linux-x64,node22-macos-x64 --out-path bin && node -e \"const fs=require('fs'); if(fs.existsSync('bin/afilimax-bundle-win.exe')) fs.renameSync('bin/afilimax-bundle-win.exe','bin/afilimax-win.exe'); if(fs.existsSync('bin/afilimax-bundle-linux')) fs.renameSync('bin/afilimax-bundle-linux','bin/afilimax-linux'); if(fs.existsSync('bin/afilimax-bundle-macos')) fs.renameSync('bin/afilimax-bundle-macos','bin/afilimax-macos');\"",
     "build:all": "npm run build && npm run build:bundle && npm run build:bin",
     "prepublishOnly": "npm run build",
     "dev": "tsx ./src/afilimax.ts",

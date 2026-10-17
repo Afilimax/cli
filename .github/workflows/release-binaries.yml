@@ -1,0 +1,85 @@
+name: Build and Release Binaries
+
+on:
+  release:
+    types: [published]
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag da release onde anexar os binários (ex: v0.2.0)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  build-binaries:
+    name: Build (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: node22-linux-x64
+            output_name: afilimax-linux-x64
+            asset_name: afilimax-linux-x64
+          - os: windows-latest
+            target: node22-win-x64
+            output_name: afilimax-win-x64.exe
+            asset_name: afilimax-win-x64.exe
+          - os: macos-latest
+            target: node22-macos-x64
+            output_name: afilimax-macos-x64
+            asset_name: afilimax-macos-x64
+          - os: macos-latest
+            target: node22-macos-arm64
+            output_name: afilimax-macos-arm64
+            asset_name: afilimax-macos-arm64
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build TypeScript
+        run: npm run build
+
+      - name: Bundle with esbuild
+        run: npm run build:bundle
+
+      - name: Create bin directory
+        shell: bash
+        run: mkdir -p bin
+
+      - name: Package binary with pkg
+        shell: bash
+        run: npx @yao-pkg/pkg dist/afilimax-bundle.js --targets ${{ matrix.target }} --output bin/${{ matrix.output_name }}
+
+      - name: Upload artifact to GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset_name }}
+          path: bin/${{ matrix.output_name }}
+          if-no-files-found: error
+
+      - name: Upload binary to GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: github.event_name == 'release' || startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && github.event.inputs.tag_name != '')
+        with:
+          tag_name: ${{ github.event.inputs.tag_name || github.event.release.tag_name || github.ref_name }}
+          files: bin/${{ matrix.output_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
