@@ -73,7 +73,7 @@
     "@afilimax/core": "^0.5.0",
     "@afilimax/magazine-luiza-provider": "^0.1.0",
     "@afilimax/mercado-livre-provider": "^0.2.1",
-    "@afilimax/mercado-livre-scraper": "^0.2.0",
+    "@afilimax/mercado-livre-scraper": "^0.2.1",
     "@afilimax/shopee-provider": "^0.1.0",
     "@mihnea.dev/puppeteer-extra-amazon-captcha": "^1.0.3",
     "@xcrap/core": "^0.2.3",
