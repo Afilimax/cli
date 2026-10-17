@@ -1,7 +1,7 @@
 import { Command } from "commander"
 
 import { description, name, version } from "../package.json"
-import { configCommand, createCommand } from "./commands/index"
+import { configCommand, createCommand, scrapeCommand } from "./commands/index"
 import { cliBanner } from "./helpers/cli-banner.helper"
 
 export function createProgram(): Command {
@@ -11,6 +11,7 @@ export function createProgram(): Command {
 
     program.addCommand(createCommand)
     program.addCommand(configCommand)
+    program.addCommand(scrapeCommand)
 
     return program
 }

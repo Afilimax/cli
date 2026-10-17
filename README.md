@@ -14,8 +14,9 @@
 - [Plataformas Suportadas](#-plataformas-suportadas)
 - [Uso e Comandos](#-uso-e-comandos)
   - [Geração de Links (`create`)](#1-geração-de-links-create)
-  - [Visualização da Configuração (`config show`)](#2-visualização-da-configuração-config-show)
-  - [Configuração de Credenciais (`config`)](#3-configuração-de-credenciais-config)
+  - [Scraping & Pesquisa de Produtos (`scrape`)](#2-scraping--pesquisa-de-produtos-scrape)
+  - [Visualização da Configuração (`config show`)](#3-visualização-da-configuração-config-show)
+  - [Configuração de Credenciais (`config`)](#4-configuração-de-credenciais-config)
 - [Métodos de Captura de Cookies (Amazon & Mercado Livre)](#-métodos-de-captura-de-cookies-amazon--mercado-livre)
 - [Armazenamento Local](#-armazenamento-local)
 - [Desenvolvimento](#-desenvolvimento)
@@ -89,7 +90,61 @@ afilimax create magazine-luiza <url>
 
 ---
 
-### 2. Visualização da Configuração (`config show`)
+### 2. Scraping & Pesquisa de Produtos (`scrape`)
+
+O comando `scrape` integra as bibliotecas `@afilimax/amazon-scraper`, `@afilimax/mercado-livre-scraper` e `@afilimax/aliexpress-scraper` para extração de dados e busca de produtos com menu interativo e geração de links de afiliados.
+
+#### 📦 Scraping de Produto Individual (`scrape product`)
+
+Extrai os dados estruturados de um produto diretamente a partir da sua URL:
+
+```bash
+# Detecta a plataforma automaticamente (Amazon, Mercado Livre ou AliExpress)
+afilimax scrape product "https://www.mercadolivre.com.br/p/MLB22649400"
+afilimax scrape product "https://www.amazon.com.br/dp/B0D1VHJVS9/"
+afilimax scrape product "https://pt.aliexpress.com/item/1005009120888793.html"
+
+# Atalho direto
+afilimax scrape <url>
+
+# Retorna os dados em formato JSON puro
+afilimax scrape product <url> --json
+
+# Gera o link de afiliado automaticamente ao finalizar
+afilimax scrape product <url> --affiliate
+```
+
+#### 🔍 Pesquisa de Produtos com Paginação Interativa (`scrape search`)
+
+Pesquisa produtos em tempo real, permitindo navegar entre páginas e selecionar qualquer item para criar o link de afiliado instantaneamente:
+
+```bash
+# Pesquisa na Amazon (alias: amz)
+afilimax scrape search amazon "echo dot"
+
+# Pesquisa no Mercado Livre (alias: ml, mercadolivre)
+afilimax scrape search mercado-livre "smart tv 55"
+
+# Pesquisa no AliExpress (alias: ali)
+afilimax scrape search aliexpress "fone bluetooth gamer"
+```
+
+**Parâmetros e Opções:**
+- `<platform>` *(obrigatório)*: `amazon` (`amz`), `mercado-livre` (`ml`) ou `aliexpress` (`ali`).
+- `<query>` *(obrigatório)*: Termo de pesquisa do produto.
+- `-p, --page <number>`: Página inicial (padrão: `1`).
+- `-l, --limit <number>`: Quantidade de produtos por página (padrão: `10`).
+- `-j, --json`: Modo não interativo que exporta os itens encontrados em formato JSON.
+
+**Recursos do Modo Interativo:**
+- Digite o número correspondente ao produto (ex: `1`) para gerar o link de afiliado na hora.
+- Pressione `Enter` ou `n` para avançar para a próxima página.
+- Digite `p` para retornar à página anterior.
+- Digite `q` para sair.
+
+---
+
+### 3. Visualização da Configuração (`config show`)
 
 Para verificar o status das suas credenciais e a expiração dos cookies armazenados:
 
@@ -106,7 +161,7 @@ afilimax config show --json
 
 ---
 
-### 3. Configuração de Credenciais (`config`)
+### 4. Configuração de Credenciais (`config`)
 
 #### 🟡 Amazon Associates
 ```bash
