@@ -1,8 +1,14 @@
+<a href="https://afilimax.net"><img src="https://raw.githubusercontent.com/Afilimax/.github/main/assets/npm-banner.svg" alt="Afilimax — Encontre a oferta. Gere o link. Divulgue sozinho." width="100%" /></a>
+
+[![npm version](https://img.shields.io/npm/v/%40afilimax%2Fcli?logo=npm)](https://www.npmjs.com/package/@afilimax/cli)
+[![npm downloads](https://img.shields.io/npm/dm/%40afilimax%2Fcli?logo=npm)](https://www.npmjs.com/package/@afilimax/cli)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/Afilimax/afilimax-cli/blob/HEAD/LICENSE)
+[![Website](https://img.shields.io/badge/website-afilimax.net-7857FF)](https://afilimax.net)
+
 # 🚀 AfiliMax CLI
 
 > Interface de Linha de Comando (CLI) modular em TypeScript para gerenciamento de credenciais e geração automática de links de afiliados.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
 
 ---
@@ -277,3 +283,10 @@ npm run build
 ## 📄 Licença
 
 Desenvolvido por **Marcuth** sob a licença [MIT](LICENSE).
+---
+
+## Automatize sua operação de afiliados
+
+> Use este pacote para automatizar sua operação de afiliados. Conheça a plataforma Afilimax e transforme ofertas em links e divulgação automática.
+
+[Conheça a Afilimax](https://afilimax.net) · [Pacote no npm](https://www.npmjs.com/package/@afilimax/cli) · [Repositório no GitHub](https://github.com/Afilimax/afilimax-cli)
