@@ -283,6 +283,7 @@ npm run build
 ## 📄 Licença
 
 Desenvolvido por **Marcuth** sob a licença [MIT](LICENSE).
+
 ---
 
 ## Automatize sua operação de afiliados
