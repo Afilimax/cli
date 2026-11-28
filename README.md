@@ -1,279 +1,199 @@
-# 🚀 AfiliMax CLI
+<a href="https://afilimax.net"><img src="https://raw.githubusercontent.com/Afilimax/.github/main/assets/npm-banner.svg" alt="Afilimax — Encontre a oferta. Gere o link. Divulgue sozinho." width="100%" /></a>
 
-> Interface de Linha de Comando (CLI) modular em TypeScript para gerenciamento de credenciais e geração automática de links de afiliados.
+[![npm version](https://img.shields.io/npm/v/%40afilimax%2Fcli?logo=npm)](https://www.npmjs.com/package/@afilimax/cli)
+[![npm downloads](https://img.shields.io/npm/dm/%40afilimax%2Fcli?logo=npm)](https://www.npmjs.com/package/@afilimax/cli)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/Afilimax/afilimax-cli/blob/HEAD/LICENSE)
+[![Website](https://img.shields.io/badge/website-afilimax.net-7857FF)](https://afilimax.net)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
+# @afilimax/cli
 
----
+Interface de linha de comando do ecossistema Afilimax para configurar credenciais, gerar links de afiliado, pesquisar produtos e extrair detalhes de ofertas em marketplaces brasileiros.
 
-## 📌 Sumário
+## Recursos
 
-- [Recursos](#-recursos)
-- [Instalação](#-instalação)
-- [Plataformas Suportadas](#-plataformas-suportadas)
-- [Uso e Comandos](#-uso-e-comandos)
-  - [Geração de Links (`create`)](#1-geração-de-links-create)
-  - [Scraping & Pesquisa de Produtos (`scrape`)](#2-scraping--pesquisa-de-produtos-scrape)
-  - [Visualização da Configuração (`config show`)](#3-visualização-da-configuração-config-show)
-  - [Configuração de Credenciais (`config`)](#4-configuração-de-credenciais-config)
-- [Métodos de Captura de Cookies (Amazon & Mercado Livre)](#-métodos-de-captura-de-cookies-amazon--mercado-livre)
-- [Armazenamento Local](#-armazenamento-local)
-- [Desenvolvimento](#-desenvolvimento)
-- [Licença](#-licença)
+- Detecção automática da plataforma a partir da URL do produto.
+- Geração de links para Amazon, Mercado Livre, Shopee, AliExpress e Magazine Luiza.
+- Pesquisa interativa e extração de produtos na Amazon, Mercado Livre e AliExpress.
+- Geração de link de afiliado a partir de resultados de pesquisa ou extração.
+- Configuração local de credenciais e cookies por plataforma.
+- Importação de cookies em JSON ou coleta por navegador automatizado.
+- Verificação da expiração dos cookies e visualização das credenciais mascaradas.
+- Saída em JSON para integração com outras ferramentas.
 
----
+## Instalação
 
-## ✨ Recursos
-
-- 🔗 **Detecção Automática de Plataforma**: Envie qualquer URL de produto e a CLI identifica automaticamente o provedor correto.
-- 🔍 **Scraping & Pesquisa de Produtos**: Scraping de dados detalhados e pesquisa com navegação paginada no terminal (Amazon, Mercado Livre e AliExpress).
-- ⚡ **Geração Instantânea de Afiliado**: Crie links de afiliados diretamente a partir dos resultados de busca ou de produtos extraídos.
-- 🍪 **Gerenciamento Inteligente de Cookies**: Suporte a exportação de cookies via extensão do navegador (recomendado) ou via navegador automatizado (Puppeteer).
-- 🔒 **Validação de Expiração**: Alerta automático sobre a data de expiração dos cookies salvos.
-- 🎨 **Interface Rica no Terminal**: Banners ASCII estilizados, relatórios em formato de cartão e mensagens coloridas no padrão ANSI.
-- 📁 **Configuração Persistente**: Salva com segurança todas as credenciais em `~/.afilimax/config.json`.
-
----
-
-## 📦 Instalação
+Instalação global:
 
 ```bash
-# Instalação global via NPM
 npm install -g @afilimax/cli
+```
 
-# Ou execução direta via npx
+Execução direta com `npx`:
+
+```bash
 npx @afilimax/cli --help
 ```
 
----
+Depois da instalação global, o executável fica disponível como `afilimax`.
 
-## 🛒 Plataformas Suportadas
+## Como usar
 
-| Plataforma | Autenticação Exigida | Método de Autenticação |
-| :--- | :--- | :--- |
-| **Amazon Associates** | Cookies de Sessão | Extensão do Chrome *(recomendado)* ou Login em Navegador |
-| **Mercado Livre Afiliados** | Tag/Slug do Afiliado + Cookies | Extensão do Chrome *(recomendado)* ou Login em Navegador |
-| **Shopee Afiliados** | App ID + App Secret (+ Sub IDs opcionais) | Parâmetros de linha de comando |
-| **AliExpress Open Platform** | App Key + App Secret + Tracking ID | Parâmetros de linha de comando |
-| **Magazine Luiza (Parceiro Magalu)** | Slug do Afiliado + Cookies | Extensão do Chrome *(recomendado)* ou Login em Navegador |
+### Gerar um link de afiliado
 
----
-
-## 🚀 Uso e Comandos
-
-### 1. Geração de Links (`create`)
-
-Você pode usar o comando genérico `create` fornecendo apenas a URL. A plataforma é detectada automaticamente:
+Informe apenas a URL para detectar a plataforma automaticamente:
 
 ```bash
 afilimax create "https://www.mercadolivre.com.br/p/MLB22649400"
 afilimax create "https://www.amazon.com.br/dp/B0D1VHJVS9/"
 ```
 
-Ou você pode utilizar os subcomandos explícitos para cada plataforma:
+Ou selecione a plataforma explicitamente:
 
 ```bash
-# Amazon (alias: amz)
 afilimax create amazon <url>
-
-# Mercado Livre (alias: ml)
 afilimax create mercado-livre <url>
-
-# Shopee (alias: sh)
 afilimax create shopee <url>
-
-# AliExpress (alias: ali)
 afilimax create aliexpress <url>
-
-# Magazine Luiza (alias: magalu, mlz, luiza)
 afilimax create magazine-luiza <url>
 ```
 
----
-
-### 2. Scraping & Pesquisa de Produtos (`scrape`)
-
-O comando `scrape` integra as bibliotecas `@afilimax/amazon-scraper`, `@afilimax/mercado-livre-scraper` e `@afilimax/aliexpress-scraper` para extração de dados e busca de produtos com menu interativo e geração de links de afiliados.
-
-#### 📦 Scraping de Produto Individual (`scrape product`)
-
-Extrai os dados estruturados de um produto diretamente a partir da sua URL:
+### Extrair um produto
 
 ```bash
-# Detecta a plataforma automaticamente (Amazon, Mercado Livre ou AliExpress)
 afilimax scrape product "https://www.mercadolivre.com.br/p/MLB22649400"
-afilimax scrape product "https://www.amazon.com.br/dp/B0D1VHJVS9/"
-afilimax scrape product "https://pt.aliexpress.com/item/1005009120888793.html"
-
-# Atalho direto
-afilimax scrape <url>
-
-# Retorna os dados em formato JSON puro
-afilimax scrape product <url> --json
-
-# Gera o link de afiliado automaticamente ao finalizar
-afilimax scrape product <url> --affiliate
+afilimax scrape product "https://www.amazon.com.br/dp/B0D1VHJVS9/" --json
+afilimax scrape product "https://pt.aliexpress.com/item/1005009120888793.html" --affiliate
 ```
 
-#### 🔍 Pesquisa de Produtos com Paginação Interativa (`scrape search`)
+O atalho `afilimax scrape <url>` executa a mesma extração e aceita `--json` e `--affiliate`.
 
-Pesquisa produtos em tempo real, permitindo navegar entre páginas e selecionar qualquer item para criar o link de afiliado instantaneamente:
+### Pesquisar produtos
 
 ```bash
-# Pesquisa na Amazon (alias: amz)
-afilimax scrape search amazon "echo dot"
-
-# Pesquisa no Mercado Livre (alias: ml, mercadolivre)
-afilimax scrape search mercado-livre "smart tv 55"
-
-# Pesquisa no AliExpress (alias: ali)
-afilimax scrape search aliexpress "fone bluetooth gamer"
+afilimax scrape search amazon "wireless headphones"
+afilimax scrape search mercado-livre "smart tv 55" --page 1 --limit 10
+afilimax scrape search aliexpress "bluetooth earphones" --json
 ```
 
-**Parâmetros e Opções:**
-- `<platform>` *(obrigatório)*: `amazon` (`amz`), `mercado-livre` (`ml`) ou `aliexpress` (`ali`).
-- `<query>` *(obrigatório)*: Termo de pesquisa do produto.
-- `-p, --page <number>`: Página inicial (padrão: `1`).
-- `-l, --limit <number>`: Quantidade de produtos por página (padrão: `10`).
-- `-j, --json`: Modo não interativo que exporta os itens encontrados em formato JSON.
+No modo interativo, digite o número de um produto para gerar seu link. Use `Enter` ou `n` para avançar, `p` para voltar e `q` para sair.
 
-**Recursos do Modo Interativo:**
-- Digite o número correspondente ao produto (ex: `1`) para gerar o link de afiliado na hora.
-- Pressione `Enter` ou `n` para avançar para a próxima página.
-- Digite `p` para retornar à página anterior.
-- Digite `q` para sair.
+### Configurar credenciais
 
----
-
-### 3. Visualização da Configuração (`config show`)
-
-Para verificar o status das suas credenciais e a expiração dos cookies armazenados:
+Amazon, Mercado Livre e Magazine Luiza usam fluxos interativos:
 
 ```bash
-# Exibe um relatório legível no terminal
+afilimax config amazon
+afilimax config mercado-livre
+afilimax config magazine-luiza
+```
+
+Shopee e AliExpress recebem as credenciais por opções:
+
+```bash
+afilimax config shopee --app-id <app-id> --app-secret <app-secret> --sub-ids <sub-id...>
+afilimax config aliexpress --app-key <app-key> --app-secret <app-secret> --tracking-id <tracking-id>
+```
+
+Consulte a configuração atual:
+
+```bash
 afilimax config show
-
-# Alias equivalente
-afilimax config ls
-
-# Exibe o objeto JSON bruto de configuração
 afilimax config show --json
 ```
 
----
+## Configuração
 
-### 4. Configuração de Credenciais (`config`)
+As credenciais ficam em `~/.afilimax/config.json`; no Windows, o caminho equivale a `C:\Users\<user>\.afilimax\config.json`.
 
-#### 🟡 Amazon Associates
+| Plataforma | Credenciais | Comando |
+| :--- | :--- | :--- |
+| Amazon Associates | Cookies de sessão | `afilimax config amazon` |
+| Mercado Livre Afiliados | Tag e cookies de sessão | `afilimax config mercado-livre` |
+| Shopee Afiliados | App ID, App Secret e Sub IDs opcionais | `afilimax config shopee` |
+| AliExpress Open Platform | App Key, App Secret e Tracking ID | `afilimax config aliexpress` |
+| Magazine Luiza | Slug de afiliado e cookies de sessão | `afilimax config magazine-luiza` |
+
+Opções de credenciais:
+
+| Plataforma | Opções |
+| :--- | :--- |
+| Shopee | `-i, --app-id`; `-s, --app-secret`; `-u, --sub-ids <subIds...>` com até cinco valores. |
+| AliExpress | `-k, --app-key`; `-s, --app-secret`; `-t, --tracking-id`. |
+
+### Como obter os cookies
+
+Para Amazon, Mercado Livre e Magazine Luiza, a CLI oferece dois métodos:
+
+1. **Exportação em JSON:** faça login no site, exporte os cookies com uma extensão e cole o JSON no terminal. A entrada aceita várias linhas.
+2. **Login pelo navegador:** escolha essa opção no fluxo interativo e faça login na janela do Chromium aberta pela CLI.
+
+Os cookies dão acesso à sua sessão. Não compartilhe nem versione o arquivo de configuração.
+
+## Comandos
+
+### `create`
+
+| Forma | Aliases | Finalidade |
+| :--- | :--- | :--- |
+| `create <url>` | — | Detecta a plataforma e gera o link. |
+| `create amazon <url>` | `amz` | Gera link da Amazon. |
+| `create mercado-livre <url>` | `ml` | Gera link do Mercado Livre. |
+| `create shopee <url>` | `sh` | Gera link da Shopee. |
+| `create aliexpress <url>` | `ali` | Gera link do AliExpress. |
+| `create magazine-luiza <url>` | `magalu`, `mlz`, `luiza` | Gera link da Magazine Luiza. |
+
+### `scrape`
+
+| Forma | Opções | Finalidade |
+| :--- | :--- | :--- |
+| `scrape <url>` | `-j, --json`; `-a, --affiliate` | Atalho para extrair um produto. |
+| `scrape product <url>` | `-j, --json`; `-a, --affiliate` | Extrai detalhes de um produto; alias `item`. |
+| `scrape search <platform> <query>` | `-p, --page`; `-l, --limit`; `-j, --json` | Pesquisa produtos; alias `find`. |
+
+A pesquisa aceita `amazon` (`amz`), `mercado-livre` (`mercadolivre`, `ml`) e `aliexpress` (`ali`). Os padrões são página `1` e limite `10`.
+
+### `config`
+
+| Forma | Aliases | Finalidade |
+| :--- | :--- | :--- |
+| `config show` | `ls` | Exibe a configuração; aceita `--json`. |
+| `config amazon` | `amz` | Configura cookies da Amazon. |
+| `config mercado-livre` | `ml` | Configura tag e cookies do Mercado Livre. |
+| `config shopee` | `sh` | Configura credenciais da Shopee. |
+| `config aliexpress` | `ali` | Configura credenciais do AliExpress. |
+| `config magazine-luiza` | `magalu`, `mlz`, `luiza` | Configura slug e cookies da Magazine Luiza. |
+
+## Desenvolvimento
+
+Instale as dependências com `npm install`. Os scripts disponíveis são:
+
+| Comando | Finalidade |
+| :--- | :--- |
+| `npm run dev -- <command>` | Executa o CLI com `tsx`. |
+| `npm run build` | Compila o TypeScript para `dist/`. |
+| `npm run build:bundle` | Gera o bundle do executável com esbuild. |
+| `npm run build:bin` | Gera binários para Windows, Linux e macOS. |
+| `npm run build:all` | Executa compilação, bundle e binários. |
+| `npm test` | Executa o Vitest. |
+| `npm run test:cov` | Executa os testes uma vez com cobertura. |
+| `npm run lint` | Executa o ESLint com correção automática. |
+| `npm run format` | Formata os arquivos de `src/` com Prettier. |
+
+Exemplo de execução local:
+
 ```bash
-afilimax config amazon
-# ou alias: afilimax config amz
-```
-*Siga as instruções interativas para colar o JSON de cookies exportado da extensão ou abrir o navegador.*
-
-#### 🟡 Mercado Livre Afiliados
-```bash
-afilimax config mercado-livre
-# ou alias: afilimax config ml
-```
-*Solicita a sua Tag/Slug de afiliado e em seguida os cookies de sessão.*
-
-#### 🟠 Shopee Afiliados
-```bash
-afilimax config shopee -i <appId> -s <appSecret> [-u <subIds...>]
-# ou alias: afilimax config sh -i 18364590164 -s SUASECRET -u canal1 canal2
+npm run dev -- config show
+npm run dev -- create "https://www.amazon.com.br/dp/B0D1VHJVS9/"
 ```
 
-Flags disponíveis:
-- `-i, --app-id <appId>` *(obrigatório)*: App ID do portal de Afiliados da Shopee.
-- `-s, --app-secret <appSecret>` *(obrigatório)*: App Secret do portal.
-- `-u, --sub-ids <subIds...>` *(opcional)*: Até 5 Sub IDs para rastreamento interno.
+## Licença
 
-#### 🔴 AliExpress Open Platform
-```bash
-afilimax config aliexpress -k <appKey> -s <appSecret> -t <trackingId>
-# ou alias: afilimax config ali -k MINHAKEY -s MEUSECRET -t MEUTRACKINGID
-```
-
-Flags disponíveis:
-- `-k, --app-key <appKey>` *(obrigatório)*: App Key do AliExpress Open Platform.
-- `-s, --app-secret <appSecret>` *(obrigatório)*: App Secret do AliExpress Open Platform.
-- `-t, --tracking-id <trackingId>` *(obrigatório)*: Tracking ID para atribuição das vendas.
-
-#### 🔵 Magazine Luiza (Parceiro Magalu)
-```bash
-afilimax config magazine-luiza
-# ou aliases: afilimax config magalu | mlz | luiza
-```
-*Solicita o Slug/Nome da loja do afiliado e em seguida os cookies de sessão.*
-
----
-
-## 🍪 Métodos de Captura de Cookies (Amazon, Mercado Livre & Magazine Luiza)
-
-Para as plataformas que necessitam de sessão ativa (Amazon, Mercado Livre e Magazine Luiza), a CLI oferece duas abordagens:
-
-### Opção 1: Extensão do Chrome (Recomendada)
-1. Instale a extensão no Chrome: [Export Cookie JSON File](https://chromewebstore.google.com/detail/export-cookie-json-file-f/nmckokihipjgplolmcmjakknndddifde).
-2. Acesse o site oficial (ex: `amazon.com.br` ou `mercadolivre.com.br`) e faça seu login normalmente.
-3. Clique na extensão e escolha **Export cookies** (um arquivo JSON será baixado).
-4. Copie todo o conteúdo do arquivo baixado e cole no terminal quando solicitado (suporta colagem em múltiplas linhas).
-
-### Opção 2: Login via Navegador Integrado
-1. Selecione a opção no menu interativo do CLI.
-2. Uma janela isolada do Chromium será aberta.
-3. Realize o login manualmente no site exibido.
-4. O CLI detectará o encerramento ou a conclusão da sessão e salvará os cookies automaticamente.
-
----
-
-## 📂 Armazenamento Local
-
-Todas as configurações salvas ficam centralizadas no diretório do usuário:
-
-- **Windows**: `C:\Users\<Usuario>\.afilimax\config.json`
-- **Linux/macOS**: `~/.afilimax/config.json`
-
----
-
-## 🛠 Desenvolvimento
-
-Caso queira contribuir ou executar a CLI em modo de desenvolvimento local:
-
-```bash
-# Clonar o repositório
-git clone https://github.com/Afilimax/afilimax-cli.git
-cd afilimax-cli
-
-# Instalar dependências
-npm install
-
-# Executar em modo desenvolvimento (via tsx)
-npm run dev -- [comando]
-# Exemplo: npm run dev -- config show
-
-# Formatar o código (Prettier)
-npm run format
-
-# Executar testes unitários (Vitest)
-npm test
-
-# Gerar build de produção
-npm run build
-```
+Distribuído sob a licença [MIT](./LICENSE).
 
 ---
 
-## 🔗 Links Úteis
+## Automatize sua operação de afiliados
 
-- **Repositório GitHub**: [https://github.com/Afilimax/afilimax-cli](https://github.com/Afilimax/afilimax-cli)
-- **Releases**: [https://github.com/Afilimax/afilimax-cli/releases](https://github.com/Afilimax/afilimax-cli/releases)
-- **Reportar Erros / Issues**: [https://github.com/Afilimax/afilimax-cli/issues](https://github.com/Afilimax/afilimax-cli/issues)
-- **Extensão de Cookies Recomendada**: [Export Cookie JSON File](https://chromewebstore.google.com/detail/export-cookie-json-file-f/nmckokihipjgplolmcmjakknndddifde)
+> Use este pacote para automatizar sua operação de afiliados. Conheça a plataforma Afilimax e transforme ofertas em links e divulgação automática.
 
----
-
-## 📄 Licença
-
-Desenvolvido por **Marcuth** sob a licença [MIT](LICENSE).
+[Conheça a Afilimax](https://afilimax.net) · [Pacote no npm](https://www.npmjs.com/package/@afilimax/cli) · [Repositório no GitHub](https://github.com/Afilimax/afilimax-cli)
